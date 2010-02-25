@@ -1,0 +1,114 @@
+<project name="bc-commons" default="dist" basedir=".">
+    <description>
+        Common code and resources used throughout Brockmann Consult
+    </description>
+
+    <!-- when invoked from master ant file, these properties are overridden -->
+    <property file="build.properties"/>
+    <property name="buildroot" value="."/>
+    <property name="target_jar" value="bc-commons.jar"/>
+    <property name="bc_commons_home_dir" value="."/>
+
+    <!-- set global properties for this build -->
+    <property name="src" location="src/main/java"/>
+    <property name="test-src" location="src/test/java"/>
+    <property name="build" location="${buildroot}/build"/>
+    <property name="dist" location="dist"/>
+
+    <path id="classpath">
+        <fileset dir="${javamail-home}/lib">
+            <include name="mailapi.jar"/>            
+        </fileset>
+        <pathelement location="${apache-dbcp-path}/${apache-dbcp-jar}"/>
+        <pathelement location="${apache-pool-path}/${apache-pool-jar}"/>        
+    </path>
+
+    <path id="test-classpath">
+        <pathelement location="${junit-jar}"/>
+        <pathelement location="${hsqldb-path}/${hsqldb-jar}"/>
+        <pathelement location="${apache-pool-path}/${apache-pool-jar}"/>
+        <pathelement location="${jdbc-path}/${jdbc-jar}"/>
+    </path>
+
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp/>
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build}"/>
+        <mkdir dir="${build}/classes"/>
+        <mkdir dir="${build}/test"/>
+        <mkdir dir="${build}/testresult"/>
+        <mkdir dir="${build}/report"/>        
+        <mkdir dir="${dist}"/>
+    </target>
+
+
+
+    <target name="compile" depends="init" description="compile the source ">
+        <echo message="${toString:classpath}"/>
+        <javac srcdir="${src}" destdir="${build}/classes" target="${java-target}" source="${java-target}">
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="test" depends="compile" description="compile and run the tests, prepare reports">
+        <echo message="${toString:test-classpath}"/>
+        <javac srcdir="${test-src}" destdir="${build}/test" target="${java-target}" source="${java-target}" debug="true">
+
+            <classpath>
+                <path refid="classpath"/>
+                <path refid="test-classpath"/>
+                <pathelement location="${build}/classes"/>
+            </classpath>
+        </javac>
+
+        <copy todir="${build}/test">
+            <fileset dir="${src}">
+                <include name="**/*"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+
+        <junit printsummary="yes">
+            <classpath>
+                <path refid="classpath"/>
+                <path refid="test-classpath"/>
+                <pathelement location="${build}/classes"/>
+                <pathelement location="${build}/test"/>
+            </classpath>
+
+            <formatter type="xml"/>
+            <!-- note: junit batchtest should not stop the script if a test fails - first junitreport needs
+                 to run, then the script will be manually stopped. -->
+            <batchtest failureproperty="junit-failed" haltonfailure="no" haltonerror="no" todir="${build}/testresult">
+                <fileset dir="${test-src}">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+
+        <junitreport todir="${build}/report">
+            <fileset dir="${build}/testresult">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${build}/report"/>
+        </junitreport>
+
+        <fail if="junit-failed" message="JUnit Tests failed"/>
+    </target>
+
+    <target name="dist" depends="compile,test" description="generate the distribution">
+        <jar jarfile="${dist}/${target_jar}" basedir="${build}/classes"/>
+        <jar jarfile="${dist}/test-${target_jar}" basedir="${build}/test"/>        
+    </target>
+
+	<target name="cruisecontrol" depends="clean,dist" description="what cruisecontrol should build">
+	</target>
+	
+    <target name="clean" description="clean up">
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+    </target>
+</project>
