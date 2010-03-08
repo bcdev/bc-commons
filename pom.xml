@@ -30,13 +30,7 @@
             <artifactId>hsqldb</artifactId>
             <version>1.8.0.10</version>
         </dependency>
-    </dependencies>
-    <scm>
-        <connection>scm:cvs:pserver:norman@bc-cvs:/usr/local/cvsroot:BcCommons</connection>
-        <developerConnection>
-            scm:cvs:pserver:norman@bc-cvs:/usr/local/cvsroot:BcCommons
-        </developerConnection>
-    </scm>
+    </dependencies>    
     <build>
         <plugins>
             <plugin>
