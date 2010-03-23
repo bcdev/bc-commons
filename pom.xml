@@ -30,7 +30,7 @@
             <artifactId>hsqldb</artifactId>
             <version>1.8.0.10</version>
         </dependency>
-    </dependencies>    
+    </dependencies>
     <scm>
         <developerConnection>
             scm:git:git@github.com:bcdev/bc-commons.git
