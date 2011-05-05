@@ -28,6 +28,10 @@ public class MD5Encoder {
         md5Digester.update(cleartext);
     }
 
+    public void update(byte[] cleartext, int offset, int len) {
+        md5Digester.update(cleartext, offset, len);
+    }
+
     public String digest() {
         byte[] hashed = md5Digester.digest();
         return new String(checkAndConvertToString(hashed));
