@@ -1,11 +1,15 @@
-package com.bc.util.string;
+package com.bc.util.encoder;
 
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MD5Encoder {
     private MessageDigest md5Digester;
     private static final char[] hex = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    private static Logger logger = Logger.getLogger(MD5Encoder.class.getName());
 
     public MD5Encoder() throws NoSuchAlgorithmException {
         md5Digester = MessageDigest.getInstance("MD5");
@@ -35,6 +39,41 @@ public class MD5Encoder {
     public String digest() {
         byte[] hashed = md5Digester.digest();
         return new String(checkAndConvertToString(hashed));
+    }
+
+    /** Encodes the stream contents */
+    public String encode(InputStream inputStream) throws IOException {
+        byte buffer[] = new byte[1024];
+        while( true ) {
+            int length = inputStream.read(buffer);
+            if( length == -1 ) {
+                break;
+            }
+            update(buffer, 0, length);
+        }
+        return digest();
+    }
+
+    /** Encodes the contents of the file */
+    public String encode(File inputFile) throws IOException {
+        InputStream in = null;
+        try{
+            in = getInputStreamFromFile(inputFile);
+            return encode(in);
+        }finally{
+            if (in != null) {
+                try{
+                    in.close();
+                }catch (IOException e) {
+                    logger.log(Level.WARNING, "Exception closing FileInputStream for file: " + inputFile, e);
+                }
+            }
+        }
+    }
+
+    //used only in tests
+    InputStream getInputStreamFromFile(File inputFile) throws FileNotFoundException {
+        return new BufferedInputStream(new FileInputStream(inputFile));
     }
 
     ////////////////////////////////////////////////////////////////////////////////
