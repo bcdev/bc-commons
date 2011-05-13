@@ -234,10 +234,24 @@ public class FileUtils {
     }
 
     public static boolean isSymbolicLink(File file) throws IOException {
-        //if the absolute canonical path is the same as the absolute path, we don't believe it is a link
+        if( file == null ) {
+            throw new IllegalArgumentException("File cannot be null");
+        }
+
+        //next line dereferences symbolic links along the path.
+        //eg. if path is /tmp/somedir/linktosomewhere/filename
+        // and /tmp/somedir/linktosomewhere is a link to /tmp/somedir2
+        // then this file is now /tmp/somedir2/filename
+        File parentFile = file.getParentFile();
+        if( parentFile != null ) {
+            file = new File(parentFile.getAbsoluteFile().getCanonicalFile(), file.getName());
+        }
+
         File absoluteFile = file.getAbsoluteFile();
         String canonicalPath = absoluteFile.getCanonicalPath();
         String absolutePath = file.getAbsolutePath();
+
+        //if the absolute canonical path is the same as the absolute path, we don't believe it is a link
         return !canonicalPath.equals(absolutePath);
 
         //org.apache.commons.io.FileUtils is supposed to have a method for this, but the versions in maven (1.3, 1.3.1, 1.4) don't seem to.

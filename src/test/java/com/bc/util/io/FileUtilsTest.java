@@ -124,6 +124,9 @@ public class FileUtilsTest extends TestCase {
             assertFalse(isSymbolicLink(testFile));
             assertTrue(result);
             assertTrue(linkFile.isDirectory());
+
+            File nonLinkFileWithLinksInPath = new File(linkFile, testFile.getName());
+            assertFalse(isSymbolicLink(nonLinkFileWithLinksInPath));
         } finally {
             TestUtil.deleteFileTree(testDir, true);
         }
