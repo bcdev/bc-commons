@@ -64,6 +64,13 @@ public class TestUtil {
         }
     }
 
+    public static void deleteFileTree(File treeRoot, boolean dereferenceSymbolicLinks) throws IOException {
+        FileUtils.deleteFileTree(treeRoot, dereferenceSymbolicLinks);
+        if (treeRoot.isDirectory()) {
+            Assert.fail("test directory could not be removed - check your tests");
+        }
+    }
+
     public static File writeTextFileInTestDir(String filename, String content) throws IOException {
         final File testFile = new File(TestUtil.TEST_PATH, filename);
         testFile.createNewFile();

@@ -15,13 +15,172 @@ package com.bc.util.io;
 import com.bc.util.TestUtil;
 import junit.framework.TestCase;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+
+import static com.bc.util.io.FileUtils.directoryContainsFile;
+import static com.bc.util.io.FileUtils.isSymbolicLink;
 
 @SuppressWarnings({"ResultOfMethodCallIgnored"})
 public class FileUtilsTest extends TestCase {
+
+    private final String systemTempDirPath = System.getProperty("java.io.tmpdir");
+    private final File systemTempDir = new File(systemTempDirPath);
+
+    public void testDeleteFileTree(boolean dereference) throws IOException {
+        File testDir = null;
+        File testDirToDelete = null;
+        try {
+            testDir = new File(systemTempDir, "testDir");
+            testDir.mkdirs();
+            File testFile = new File(testDir, "testFile");
+            testFile.createNewFile();
+
+            testDirToDelete = new File(systemTempDir, "testDirToDelete");
+            testDirToDelete.mkdirs();
+            File testLinkToTestDir = new File(testDirToDelete, "testLinkToTestDir");
+
+            createSymLink(testDir, testLinkToTestDir);
+
+            if( dereference ) {
+                FileUtils.deleteFileTree(testDirToDelete, true);
+            }else{
+                FileUtils.deleteFileTree(testDirToDelete, false);
+            }
+
+            assertFalse(testDirToDelete.exists());
+            assertFalse(testLinkToTestDir.exists());
+            if( dereference ) {
+                //if we dereference, we expect the directory linked to, and its content to be deleted along with the "testDirToDelete" directory.
+                assertFalse(testDir.isDirectory());
+                assertFalse(testFile.isFile());
+            }else{
+                assertTrue(testDir.isDirectory());
+                assertTrue(testFile.isFile());
+            }
+        } finally {
+            //cleanup (which unfortunately relies on the same code being tested to work :D)
+            TestUtil.deleteFileTree(testDir, true);
+            TestUtil.deleteFileTree(testDirToDelete, true);
+        }
+    }
+
+    private void createSymLink(File filetoLinkTo, File linkFileDestination) throws IOException {
+        if( linkFileDestination.exists() )
+            throw new RuntimeException("link already exists");
+        String[] linkCommand = new String[]{"ln", "-s", filetoLinkTo.getAbsolutePath(), linkFileDestination.getAbsolutePath()};
+        Process exec = Runtime.getRuntime().exec(linkCommand);
+        try {
+            int result = exec.waitFor();
+            printProcessErr(exec);
+            assertEquals(0, result);
+        } catch (InterruptedException e) {
+        }
+    }
+
+    public void testDeleteFileTree() throws IOException {
+        testDeleteFileTree(false);
+    }
+
+    public void testDeleteFileTreeDereference() throws IOException {
+        testDeleteFileTree(true);
+    }
+
+    public void testIsLink_file() throws IOException {
+        File testDir = null;
+        try {
+            testDir = new File(systemTempDir, "testDir");
+            testDir.mkdirs();
+            File testFile = new File(testDir, "testFile");
+            testFile.createNewFile();
+
+            File linkFile = new File(testDir, "linkFile");
+
+            createSymLink(testFile, linkFile);
+
+            boolean result = isSymbolicLink(linkFile);
+            assertFalse(isSymbolicLink(testDir));
+            assertFalse(isSymbolicLink(testFile));
+            assertTrue(result);
+            assertTrue(!linkFile.isDirectory());
+        } finally {
+            TestUtil.deleteFileTree(testDir, true);
+        }
+    }
+
+    public void testIsLink_directory() throws IOException {
+        File testDir = null;
+        try {
+            testDir = new File(systemTempDir, "testDir");
+            testDir.mkdirs();
+            File testFile = new File(testDir, "testFile");
+            testFile.createNewFile();
+
+            File linkFile = new File(testDir, "linkFile");
+
+            createSymLink(testDir, linkFile);
+
+            boolean result = isSymbolicLink(linkFile);
+            assertFalse(isSymbolicLink(testDir));
+            assertFalse(isSymbolicLink(testFile));
+            assertTrue(result);
+            assertTrue(linkFile.isDirectory());
+        } finally {
+            TestUtil.deleteFileTree(testDir, true);
+        }
+    }
+
+    public void testDirectoryContainsFile() throws Exception {
+        assertTrue(directoryContainsFile(new File("/some/dir/somewhere"), new File("/some/dir/somewhere/and/inside/we/have/this/file")));
+        assertFalse(directoryContainsFile(new File("/some/dir/somewhere"), new File("/some/dir/elsewhere/and/inside/we/have/this/file")));
+
+        File testDir1 = null;
+        File testDir2 = null;
+
+        //now test again with links
+        try {
+            testDir1 = new File(systemTempDir, "testDir1");
+            testDir1.mkdirs();
+            File testFile = new File(testDir1, "testFile");
+            testFile.createNewFile();
+
+            testDir2 = new File(systemTempDir, "testDir2");
+            testDir2.mkdirs();
+            File linkFile1 = new File(testDir2, "linkFile1");
+            File linkFile2 = new File(testDir2, "linkFile2");
+
+            createSymLink(testDir1, linkFile1);
+            createSymLink(testDir2, linkFile2);
+
+            //testFile1 should be directly inside testDir1
+            assertTrue(directoryContainsFile(testDir1, testFile));
+
+            //linkFile1 should be a link, directly inside testDir2
+            assertTrue(directoryContainsFile(testDir2, linkFile1));
+
+            //linkFile1 is linked to a file that is not in testDir2
+            assertFalse(directoryContainsFile(testDir2, linkFile1.getCanonicalFile()));
+
+            //linkFile2 is linked to a file that is in testDir2
+            assertTrue(directoryContainsFile(testDir2, linkFile2));
+            assertTrue(directoryContainsFile(testDir2, linkFile2.getCanonicalFile()));
+        } finally {
+            TestUtil.deleteFileTree(testDir1, true);
+            TestUtil.deleteFileTree(testDir2, true);
+        }
+
+    }
+
+    private void printProcessErr(Process exec) throws IOException {
+        InputStream in = exec.getErrorStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        while( true ) {
+            String line = reader.readLine();
+            if( line == null ) {
+                break;
+            }
+            System.err.println(line);
+        }
+    }
 
     public void testGetFileNameFromPath() {
         try {

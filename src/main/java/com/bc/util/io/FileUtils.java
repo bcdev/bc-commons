@@ -12,6 +12,8 @@
  */
 package com.bc.util.io;
 
+import sun.awt.shell.ShellFolder;
+
 import javax.imageio.stream.FileImageInputStream;
 import javax.imageio.stream.FileImageOutputStream;
 import java.io.File;
@@ -174,11 +176,90 @@ public class FileUtils {
         return tempFile;
     }
 
+    /**
+     * @param dereferenceSymbolicLinks means that when a link is found and points is a directory, we go in that directory
+     * and delete the contents there, even if the contents are not inside the treeRoot
+     */
+    public static void deleteFileTree(File treeRoot, boolean dereferenceSymbolicLinks) throws IOException {
+        if( isSymbolicLink(treeRoot) ) {
+            treeRoot.delete();
+            return;//do not continue... if you do, the listFiles() method might return files outside the treeRoot
+        }
+
+        File[] files = treeRoot.listFiles();
+        if (files != null) {
+            for (int i = 0; i < files.length; i++) {
+                File file = files[i];
+
+                boolean linkFound = isSymbolicLink(file);
+                if( !dereferenceSymbolicLinks && linkFound) {
+                    // if it is a link, and we are not supposed to dereference symlinks
+                    file.delete(); //delete the symbolic link
+                }else{
+                    if( file.isDirectory() ) {
+                        // if it is a directory, recursive call
+                        if( linkFound ) {
+                            File canonicalFile = file.getCanonicalFile();
+                            if( !canonicalFile.exists() || directoryContainsFile(treeRoot, canonicalFile) ) {
+                                //if canonicalFile doesn't exist, or is inside treeRoot, skip dereferencing and just delete the link
+                                file.delete();//delete the symbolic link
+                            }else{
+                                //delete linked directory and its contents
+                                deleteFileTree(canonicalFile, dereferenceSymbolicLinks);
+                                file.delete();//delete the symbolic link
+                            }
+                        }else{
+                            deleteFileTree(file, dereferenceSymbolicLinks);
+                        }
+                    }else{
+                        // if it is a normal file, delete it
+                        file.delete();
+                    }
+                }
+            }
+        }
+
+        treeRoot.delete();
+    }
+
+    public static boolean directoryContainsFile(File treeRoot, File file) {
+        File fileToLookForInTreeRoot = file;
+        while (fileToLookForInTreeRoot != null) {
+            if (treeRoot.equals(fileToLookForInTreeRoot)) {
+                return true;
+            }
+            fileToLookForInTreeRoot = fileToLookForInTreeRoot.getParentFile();
+        }
+        return false;
+    }
+
+    public static boolean isSymbolicLink(File file) throws IOException {
+        //if the absolute canonical path is the same as the absolute path, we don't believe it is a link
+        File absoluteFile = file.getAbsoluteFile();
+        String canonicalPath = absoluteFile.getCanonicalPath();
+        String absolutePath = file.getAbsolutePath();
+        return !canonicalPath.equals(absolutePath);
+
+        //org.apache.commons.io.FileUtils is supposed to have a method for this, but the versions in maven (1.3, 1.3.1, 1.4) don't seem to.
+        //return org.apache.commons.io.FileUtils.isSymlink(file);
+    }
+
+    /**
+     * @param treeRoot The directory to delete along with its contents.
+     */
+    /* @todo 1 pm/* Someone needs to review this to decide how it affects other software.
+     * This method is faulty. If the directory contains a symlink to a directory outside the tree to be deleted,
+     * the contents of the linked directory will be gone too. Replace this method with a call to deleteFileTree(treeRoot, false) when it is finished.
+     *
+     * http://www.onyxbits.de/content/blog/patrick/how-deal-filesystem-softlinkssymbolic-links-java
+     */
+    @Deprecated
     public static void deleteFileTree(File treeRoot) {
         File[] files = treeRoot.listFiles();
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
+
                 if (file.isDirectory()) {
                     deleteFileTree(file);
                 }
