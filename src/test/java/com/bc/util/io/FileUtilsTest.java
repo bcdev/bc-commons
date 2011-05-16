@@ -39,7 +39,7 @@ public class FileUtilsTest extends TestCase {
             testDirToDelete.mkdirs();
             File testLinkToTestDir = new File(testDirToDelete, "testLinkToTestDir");
 
-            if( lnCommandAvailable() ) {
+            if( isLnCommandAvailable() ) {
                 createSymLink(testDir, testLinkToTestDir);
             }
 
@@ -50,7 +50,7 @@ public class FileUtilsTest extends TestCase {
             }
 
             assertFalse(testDirToDelete.exists());
-            if( lnCommandAvailable() ) {
+            if( isLnCommandAvailable() ) {
                 assertFalse(testLinkToTestDir.exists());
             }
             if( dereference ) {
@@ -82,18 +82,18 @@ public class FileUtilsTest extends TestCase {
     }
 
     private Boolean lnCommandAvailable_cached = null;
-    private boolean lnCommandAvailable() {
+    private boolean isLnCommandAvailable() {
         if( lnCommandAvailable_cached != null )
             return lnCommandAvailable_cached;
         String[] linkCommand = new String[]{"which", "ln"};
         try {
             Process exec = Runtime.getRuntime().exec(linkCommand);
             int result = exec.waitFor();
-            return result == 0;
+            lnCommandAvailable_cached = (result == 0);
         } catch (InterruptedException e) {
         } catch (IOException e) {
         }
-        return false;
+        return lnCommandAvailable_cached;
     }
 
 
@@ -102,7 +102,7 @@ public class FileUtilsTest extends TestCase {
     }
 
     public void testDeleteFileTreeDereference() throws IOException {
-        if( !lnCommandAvailable() ) {
+        if( !isLnCommandAvailable() ) {
             System.out.println("testDeleteFileTreeDereference() suppressed (ln command not available)");
             return;
         }
@@ -110,7 +110,7 @@ public class FileUtilsTest extends TestCase {
     }
 
     public void testIsLink_file() throws IOException {
-        if( !lnCommandAvailable() ) {
+        if( !isLnCommandAvailable() ) {
             System.out.println("testIsLink_file() suppressed (ln command not available)");
             return;
         }
@@ -136,7 +136,7 @@ public class FileUtilsTest extends TestCase {
     }
 
     public void testIsLink_directory() throws IOException {
-        if( !lnCommandAvailable() ) {
+        if( !isLnCommandAvailable() ) {
             System.out.println("testIsLink_directory() suppressed (ln command not available)");
             return;
         }
@@ -165,7 +165,7 @@ public class FileUtilsTest extends TestCase {
     }
 
     public void testDirectoryContainsFile() throws Exception {
-        if( !lnCommandAvailable() ) {
+        if( !isLnCommandAvailable() ) {
             System.out.println("testDirectoryContainsFile() suppressed (ln command not available)");
             return;
         }
