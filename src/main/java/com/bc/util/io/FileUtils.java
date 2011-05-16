@@ -267,7 +267,6 @@ public class FileUtils {
      *
      * http://www.onyxbits.de/content/blog/patrick/how-deal-filesystem-softlinkssymbolic-links-java
      */
-    @Deprecated
     public static void deleteFileTree(File treeRoot) {
         File[] files = treeRoot.listFiles();
         if (files != null) {
