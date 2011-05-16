@@ -85,7 +85,7 @@ public class FileUtilsTest extends TestCase {
     private boolean lnCommandAvailable() {
         if( lnCommandAvailable_cached != null )
             return lnCommandAvailable_cached;
-        String[] linkCommand = new String[]{"ln", "--help"};
+        String[] linkCommand = new String[]{"which", "ln"};
         try {
             Process exec = Runtime.getRuntime().exec(linkCommand);
             int result = exec.waitFor();
