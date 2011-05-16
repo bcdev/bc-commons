@@ -39,7 +39,9 @@ public class FileUtilsTest extends TestCase {
             testDirToDelete.mkdirs();
             File testLinkToTestDir = new File(testDirToDelete, "testLinkToTestDir");
 
-            createSymLink(testDir, testLinkToTestDir);
+            if( lnCommandAvailable() ) {
+                createSymLink(testDir, testLinkToTestDir);
+            }
 
             if( dereference ) {
                 FileUtils.deleteFileTree(testDirToDelete, true);
@@ -48,7 +50,9 @@ public class FileUtilsTest extends TestCase {
             }
 
             assertFalse(testDirToDelete.exists());
-            assertFalse(testLinkToTestDir.exists());
+            if( lnCommandAvailable() ) {
+                assertFalse(testLinkToTestDir.exists());
+            }
             if( dereference ) {
                 //if we dereference, we expect the directory linked to, and its content to be deleted along with the "testDirToDelete" directory.
                 assertFalse(testDir.isDirectory());
@@ -77,15 +81,39 @@ public class FileUtilsTest extends TestCase {
         }
     }
 
+    private Boolean lnCommandAvailable_cached = null;
+    private boolean lnCommandAvailable() {
+        if( lnCommandAvailable_cached != null )
+            return lnCommandAvailable_cached;
+        String[] linkCommand = new String[]{"ln", "--help"};
+        try {
+            Process exec = Runtime.getRuntime().exec(linkCommand);
+            int result = exec.waitFor();
+            return result == 0;
+        } catch (InterruptedException e) {
+        } catch (IOException e) {
+        }
+        return false;
+    }
+
+
     public void testDeleteFileTree() throws IOException {
         testDeleteFileTree(false);
     }
 
     public void testDeleteFileTreeDereference() throws IOException {
+        if( !lnCommandAvailable() ) {
+            System.out.println("testDeleteFileTreeDereference() suppressed (ln command not available)");
+            return;
+        }
         testDeleteFileTree(true);
     }
 
     public void testIsLink_file() throws IOException {
+        if( !lnCommandAvailable() ) {
+            System.out.println("testIsLink_file() suppressed (ln command not available)");
+            return;
+        }
         File testDir = null;
         try {
             testDir = new File(systemTempDir, "testDir");
@@ -108,6 +136,10 @@ public class FileUtilsTest extends TestCase {
     }
 
     public void testIsLink_directory() throws IOException {
+        if( !lnCommandAvailable() ) {
+            System.out.println("testIsLink_directory() suppressed (ln command not available)");
+            return;
+        }
         File testDir = null;
         try {
             testDir = new File(systemTempDir, "testDir");
@@ -133,6 +165,10 @@ public class FileUtilsTest extends TestCase {
     }
 
     public void testDirectoryContainsFile() throws Exception {
+        if( !lnCommandAvailable() ) {
+            System.out.println("testDirectoryContainsFile() suppressed (ln command not available)");
+            return;
+        }
         assertTrue(directoryContainsFile(new File("/some/dir/somewhere"), new File("/some/dir/somewhere/and/inside/we/have/this/file")));
         assertFalse(directoryContainsFile(new File("/some/dir/somewhere"), new File("/some/dir/elsewhere/and/inside/we/have/this/file")));
 
