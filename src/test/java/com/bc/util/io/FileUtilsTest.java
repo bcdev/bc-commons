@@ -23,105 +23,39 @@ import static com.bc.util.io.FileUtils.isSymbolicLink;
 @SuppressWarnings({"ResultOfMethodCallIgnored"})
 public class FileUtilsTest extends TestCase {
 
+    private static final String[] LINK_COMMAND = new String[]{"which", "ln"};
+
     private final String systemTempDirPath = System.getProperty("java.io.tmpdir");
     private final File systemTempDir = new File(systemTempDirPath);
-
-    public void testDeleteFileTree(boolean dereference) throws IOException {
-        File testDir = null;
-        File testDirToDelete = null;
-        try {
-            testDir = new File(systemTempDir, "testDir");
-            testDir.mkdirs();
-            File testFile = new File(testDir, "testFile");
-            testFile.createNewFile();
-
-            testDirToDelete = new File(systemTempDir, "testDirToDelete");
-            testDirToDelete.mkdirs();
-            File testLinkToTestDir = new File(testDirToDelete, "testLinkToTestDir");
-
-            if( isLnCommandAvailable() ) {
-                createSymLink(testDir, testLinkToTestDir);
-            }
-
-            if( dereference ) {
-                FileUtils.deleteFileTree(testDirToDelete, true);
-            }else{
-                FileUtils.deleteFileTree(testDirToDelete, false);
-            }
-
-            assertFalse(testDirToDelete.exists());
-            if( isLnCommandAvailable() ) {
-                assertFalse(testLinkToTestDir.exists());
-            }
-            if( dereference ) {
-                //if we dereference, we expect the directory linked to, and its content to be deleted along with the "testDirToDelete" directory.
-                assertFalse(testDir.isDirectory());
-                assertFalse(testFile.isFile());
-            }else{
-                assertTrue(testDir.isDirectory());
-                assertTrue(testFile.isFile());
-            }
-        } finally {
-            //cleanup (which unfortunately relies on the same code being tested to work :D)
-            TestUtil.deleteFileTree(testDir, true);
-            TestUtil.deleteFileTree(testDirToDelete, true);
-        }
-    }
-
-    private void createSymLink(File filetoLinkTo, File linkFileDestination) throws IOException {
-        if( linkFileDestination.exists() )
-            throw new RuntimeException("link already exists");
-        String[] linkCommand = new String[]{"ln", "-s", filetoLinkTo.getAbsolutePath(), linkFileDestination.getAbsolutePath()};
-        Process exec = Runtime.getRuntime().exec(linkCommand);
-        try {
-            int result = exec.waitFor();
-            printProcessErr(exec);
-            assertEquals(0, result);
-        } catch (InterruptedException e) {
-        }
-    }
-
     private Boolean lnCommandAvailable_cached = null;
-    private boolean isLnCommandAvailable() {
-        if( lnCommandAvailable_cached != null )
-            return lnCommandAvailable_cached;
-        String[] linkCommand = new String[]{"which", "ln"};
-        try {
-            Process exec = Runtime.getRuntime().exec(linkCommand);
-            int result = exec.waitFor();
-            lnCommandAvailable_cached = (result == 0);
-        } catch (InterruptedException e) {
-        } catch (IOException e) {
-        }
-        return lnCommandAvailable_cached;
-    }
-
 
     public void testDeleteFileTree() throws IOException {
         testDeleteFileTree(false);
     }
 
     public void testDeleteFileTreeDereference() throws IOException {
-        if( !isLnCommandAvailable() ) {
+        if (!isLnCommandAvailable()) {
             System.out.println("testDeleteFileTreeDereference() suppressed (ln command not available)");
             return;
         }
+
         testDeleteFileTree(true);
     }
 
     public void testIsLink_file() throws IOException {
-        if( !isLnCommandAvailable() ) {
+        if (!isLnCommandAvailable()) {
             System.out.println("testIsLink_file() suppressed (ln command not available)");
             return;
         }
+
         File testDir = null;
         try {
             testDir = new File(systemTempDir, "testDir");
             testDir.mkdirs();
-            File testFile = new File(testDir, "testFile");
+            final File testFile = new File(testDir, "testFile");
             testFile.createNewFile();
 
-            File linkFile = new File(testDir, "linkFile");
+            final File linkFile = new File(testDir, "linkFile");
 
             createSymLink(testFile, linkFile);
 
@@ -136,18 +70,19 @@ public class FileUtilsTest extends TestCase {
     }
 
     public void testIsLink_directory() throws IOException {
-        if( !isLnCommandAvailable() ) {
+        if (!isLnCommandAvailable()) {
             System.out.println("testIsLink_directory() suppressed (ln command not available)");
             return;
         }
+
         File testDir = null;
         try {
             testDir = new File(systemTempDir, "testDir");
             testDir.mkdirs();
-            File testFile = new File(testDir, "testFile");
+            final File testFile = new File(testDir, "testFile");
             testFile.createNewFile();
 
-            File linkFile = new File(testDir, "linkFile");
+            final File linkFile = new File(testDir, "linkFile");
 
             createSymLink(testDir, linkFile);
 
@@ -165,10 +100,11 @@ public class FileUtilsTest extends TestCase {
     }
 
     public void testDirectoryContainsFile() throws Exception {
-        if( !isLnCommandAvailable() ) {
+        if (!isLnCommandAvailable()) {
             System.out.println("testDirectoryContainsFile() suppressed (ln command not available)");
             return;
         }
+
         assertTrue(directoryContainsFile(new File("/some/dir/somewhere"), new File("/some/dir/somewhere/and/inside/we/have/this/file")));
         assertFalse(directoryContainsFile(new File("/some/dir/somewhere"), new File("/some/dir/elsewhere/and/inside/we/have/this/file")));
 
@@ -209,18 +145,7 @@ public class FileUtilsTest extends TestCase {
 
     }
 
-    private void printProcessErr(Process exec) throws IOException {
-        InputStream in = exec.getErrorStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        while( true ) {
-            String line = reader.readLine();
-            if( line == null ) {
-                break;
-            }
-            System.err.println(line);
-        }
-    }
-
+    @SuppressWarnings({"NullableProblems"})
     public void testGetFileNameFromPath() {
         try {
             FileUtils.getFileNameFromPath(null);
@@ -249,17 +174,18 @@ public class FileUtilsTest extends TestCase {
         assertEquals("withoutdot", FileUtils.getFileNameWithoutExtension("withoutdot"));
     }
 
+    @SuppressWarnings({"NullableProblems"})
     public void testGetSizeInBytesInvalidArguments() {
         assertEquals(0, FileUtils.getSizeInBytes(null));
 
-        UnitTestFile file = new UnitTestFile("somewhere");
+        final UnitTestFile file = new UnitTestFile("somewhere");
         file.setExists(false);
 
         assertEquals(0, FileUtils.getSizeInBytes(file));
     }
 
     public void testGetSizeInBytesForFiles() {
-        UnitTestFile file = new UnitTestFile("somewhere.else");
+        final UnitTestFile file = new UnitTestFile("somewhere.else");
 
         file.setLength(12);
         assertEquals(12, FileUtils.getSizeInBytes(file));
@@ -269,11 +195,11 @@ public class FileUtilsTest extends TestCase {
     }
 
     public void testGetSizeInBytesForDirectory() {
-        UnitTestFile file_1 = new UnitTestFile("100.bytes");
+        final UnitTestFile file_1 = new UnitTestFile("100.bytes");
         file_1.setLength(100);
-        UnitTestFile file_2 = new UnitTestFile("200.bytes");
+        final UnitTestFile file_2 = new UnitTestFile("200.bytes");
         file_2.setLength(200);
-        UnitTestDir dir = new UnitTestDir("testdir");
+        final UnitTestDir dir = new UnitTestDir("testdir");
 
         dir.addFile(file_1);
         dir.addFile(file_2);
@@ -282,14 +208,14 @@ public class FileUtilsTest extends TestCase {
     }
 
     public void testGetSizeInBytesForNestedDirectories() {
-        UnitTestFile file_1 = new UnitTestFile("100.bytes");
+        final UnitTestFile file_1 = new UnitTestFile("100.bytes");
         file_1.setLength(100);
-        UnitTestFile file_2 = new UnitTestFile("200.bytes");
+        final UnitTestFile file_2 = new UnitTestFile("200.bytes");
         file_2.setLength(200);
-        UnitTestFile file_3 = new UnitTestFile("200.bytes");
+        final UnitTestFile file_3 = new UnitTestFile("200.bytes");
         file_3.setLength(300);
-        UnitTestDir dir = new UnitTestDir("testdir");
-        UnitTestDir subDir = new UnitTestDir("Subdir");
+        final UnitTestDir dir = new UnitTestDir("testdir");
+        final UnitTestDir subDir = new UnitTestDir("Subdir");
 
         subDir.addFile(file_1);
         subDir.addFile(file_2);
@@ -432,5 +358,91 @@ public class FileUtilsTest extends TestCase {
         targetStream.close();
 
         assertEquals(testData, new String(buffer));
+    }
+
+    private void testDeleteFileTree(boolean dereference) throws IOException {
+        File testDir = null;
+        File testDirToDelete = null;
+        try {
+            testDir = new File(systemTempDir, "testDir");
+            testDir.mkdirs();
+            final File testFile = new File(testDir, "testFile");
+            testFile.createNewFile();
+
+            testDirToDelete = new File(systemTempDir, "testDirToDelete");
+            testDirToDelete.mkdirs();
+            final File testLinkToTestDir = new File(testDirToDelete, "testLinkToTestDir");
+
+            if (isLnCommandAvailable()) {
+                createSymLink(testDir, testLinkToTestDir);
+            }
+
+            if (dereference) {
+                FileUtils.deleteFileTree(testDirToDelete, true);
+            } else {
+                FileUtils.deleteFileTree(testDirToDelete, false);
+            }
+
+            assertFalse(testDirToDelete.exists());
+            if (isLnCommandAvailable()) {
+                assertFalse(testLinkToTestDir.exists());
+            }
+            if (dereference) {
+                //if we dereference, we expect the directory linked to, and its content to be deleted along with the "testDirToDelete" directory.
+                assertFalse(testDir.isDirectory());
+                assertFalse(testFile.isFile());
+            } else {
+                assertTrue(testDir.isDirectory());
+                assertTrue(testFile.isFile());
+            }
+        } finally {
+            //cleanup (which unfortunately relies on the same code being tested to work :D)
+            TestUtil.deleteFileTree(testDir, true);
+            TestUtil.deleteFileTree(testDirToDelete, true);
+        }
+    }
+
+    private void createSymLink(File filetoLinkTo, File linkFileDestination) throws IOException {
+        if (linkFileDestination.exists()) {
+            throw new RuntimeException("link already exists");
+        }
+
+        final String[] linkCommand = new String[]{"ln", "-s", filetoLinkTo.getAbsolutePath(), linkFileDestination.getAbsolutePath()};
+        final Process exec = Runtime.getRuntime().exec(linkCommand);
+        try {
+            int result = exec.waitFor();
+            printProcessErr(exec);
+            assertEquals(0, result);
+        } catch (InterruptedException e) {
+        }
+    }
+
+    private boolean isLnCommandAvailable() {
+        if (lnCommandAvailable_cached != null) {
+            return lnCommandAvailable_cached;
+        }
+
+        try {
+            final Process exec = Runtime.getRuntime().exec(LINK_COMMAND);
+            int result = exec.waitFor();
+            lnCommandAvailable_cached = (result == 0);
+        } catch (InterruptedException e) {
+            lnCommandAvailable_cached = false;
+        } catch (IOException e) {
+            lnCommandAvailable_cached = false;
+        }
+        return lnCommandAvailable_cached;
+    }
+
+    private void printProcessErr(Process exec) throws IOException {
+        final InputStream in = exec.getErrorStream();
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        while (true) {
+            final String line = reader.readLine();
+            if (line == null) {
+                break;
+            }
+            System.err.println(line);
+        }
     }
 }
