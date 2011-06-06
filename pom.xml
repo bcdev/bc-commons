@@ -7,7 +7,7 @@
     <groupId>com.bc</groupId>
     <artifactId>bc-commons</artifactId>
     <name>BC Commons</name>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
