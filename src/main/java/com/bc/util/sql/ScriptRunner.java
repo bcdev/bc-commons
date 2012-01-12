@@ -6,12 +6,7 @@
  */
 package com.bc.util.sql;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -57,10 +52,13 @@ public class ScriptRunner {
         return sql;
     }
 
-    public void logError(SQLException e) {
+    public void logError(SQLException e, String statement) {
         if (logger != null) {
             logger.severe("SQL script error, before or at line " + lineNumber + ": " + e.getMessage() + "\n" +
-                          "  sql=\"" + this.sql + "\"");
+                                  "  sql=\"" + this.sql + "\"");
+            if (statement != null) {
+                logger.severe(statement);
+            }
         }
     }
 
@@ -95,7 +93,7 @@ public class ScriptRunner {
     }
 
     public void runScript(final Connection connection, final Reader reader) throws IOException,
-                                                                                   SQLException {
+            SQLException {
         initScriptExecution(connection, reader);
         try {
             runScriptImpl();
@@ -105,7 +103,7 @@ public class ScriptRunner {
     }
 
     private void runScriptImpl() throws IOException,
-                                        SQLException {
+            SQLException {
         String line;
         while (true) {
             line = this.reader.readLine();
@@ -146,11 +144,11 @@ public class ScriptRunner {
             try {
                 executeSql(sql);
             } catch (SQLException e) {
-                logError(e);
+                logError(e, sql);
                 if (errorHandler != null) {
                     errorHandler.handleError(this, e);
                 } else {
-                    logError(e);
+                    logError(e, sql);
                     throw e;
                 }
             }
@@ -169,5 +167,4 @@ public class ScriptRunner {
 
         void handleError(ScriptRunner scriptRunner, SQLException e) throws SQLException;
     }
-
 }
