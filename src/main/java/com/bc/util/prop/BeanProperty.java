@@ -30,6 +30,9 @@ public class BeanProperty implements Property {
         if (getter.getParameterTypes().length != 0) {
             throw new IllegalArgumentException("no getter method parameters allowed here (name = '\"+ name +\"')");
         }
+        if (getter == null) {
+            throw new IllegalArgumentException("Parameter 'getter' must not be null for name = '\"+ name +\"'");
+        }
         this.name = name;
         this.type = getter.getReturnType(); 
         this.getter = getter;
@@ -76,7 +79,7 @@ public class BeanProperty implements Property {
      */
     public void setValue(Object beanInstance, Object value) {
         if (setter == null) {
-            throw new IllegalStateException("property is not assignable");
+            throw new IllegalStateException("property is not assignable. No setter method available for property '"+this.name+"'");
         }
         try {
             setter.invoke(beanInstance, new Object[]{value});
