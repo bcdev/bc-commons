@@ -48,7 +48,9 @@ public class CompositeTransaction implements Transaction {
      * @throws SQLException if a database error occurs
      */
     public void execute(Connection connection) throws SQLException {
+
         for (int i = 0; i < transactions.size(); i++) {
+            System.out.println("Composite transaction: " + i );
             final Transaction t = transactions.get(i);
             t.execute(connection);
         }
