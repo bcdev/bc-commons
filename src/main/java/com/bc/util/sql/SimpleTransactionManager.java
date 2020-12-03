@@ -41,7 +41,6 @@ public class SimpleTransactionManager implements TransactionManager {
                 try {
                     transaction.execute(connection);
                 } catch (SQLException e) {
-                    // Todo: Output SQL statement
                     System.out.println("SQL statement causing an error:" + "");
                     connection.rollback();
                     throw e;
