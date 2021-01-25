@@ -146,6 +146,9 @@ public class ScriptRunner {
             try {
                 executeSql(sql);
             } catch (SQLException e) {
+
+                System.out.println("Last SQL statement causing the error: " + sql);
+
                 logError(e);
                 if (errorHandler != null) {
                     errorHandler.handleError(this, e);

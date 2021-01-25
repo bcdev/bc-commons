@@ -41,11 +41,17 @@ public class SimpleTransactionManager implements TransactionManager {
                 try {
                     transaction.execute(connection);
                 } catch (SQLException e) {
-                    if (transaction instanceof TemplateTransaction) {
+                    if (transaction instanceof TemplateTransaction ||
+                            transaction instanceof UpdateTransaction) {
                         final TemplateTransaction trans = (TemplateTransaction) transaction;
                         final String sql = trans.getTemplate().getSql();
                         System.out.println("Last SQL statement causing the error: " + sql);
                     }
+                    // else if (transaction instanceof CompositeTransaction){
+                    //     final CompositeTransaction trans = (CompositeTransaction) transaction;
+                    //     final String sql = trans.getTemplate().getSql();
+                    //     System.out.println("Last SQL statement causing the error: " + sql);
+                    // }
                     connection.rollback();
                     throw e;
                 }
