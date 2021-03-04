@@ -55,6 +55,7 @@ public class CompositeTransaction implements Transaction {
                 System.out.println("Trying to execute: " + sql);
                 System.out.println(((UpdateTransaction) t).getParameterObject());
             }
+            System.out.println(t.getClass().getName());
             t.execute(connection);
         }
     }
