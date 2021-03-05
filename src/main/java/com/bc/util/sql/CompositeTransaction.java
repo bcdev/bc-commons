@@ -50,12 +50,11 @@ public class CompositeTransaction implements Transaction {
     public void execute(Connection connection) throws SQLException {
         for (int i = 0; i < transactions.size(); i++) {
             final Transaction t = transactions.get(i);
-            if (t instanceof UpdateTransaction) {
+            if (t instanceof UpdateTransaction && i < 2) {
                 final String sql = ((UpdateTransaction) t).getTemplate().getSql();
                 System.out.println("Trying to execute: " + sql);
                 System.out.println(((UpdateTransaction) t).getParameterObject());
             }
-            System.out.println(t.getClass().getName());
             t.execute(connection);
         }
     }
