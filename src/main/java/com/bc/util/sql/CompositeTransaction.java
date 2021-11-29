@@ -52,8 +52,10 @@ public class CompositeTransaction implements Transaction {
             final Transaction t = transactions.get(i);
             if (t instanceof UpdateTransaction && i < 2) {
                 final String sql = ((UpdateTransaction) t).getTemplate().getSql();
-//                System.out.println("Trying to execute: " + sql);
-//                System.out.println(((UpdateTransaction) t).getParameterObject());
+                if (i < 2) {
+                    System.out.println("Trying to execute: " + sql);
+                    System.out.println(((UpdateTransaction) t).getParameterObject());
+                }
             }
             t.execute(connection);
         }
