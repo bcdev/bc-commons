@@ -14,8 +14,8 @@ package com.bc.util.sql;
  */
 public abstract class TemplateTransaction implements Transaction {
 
-    private Template template;
-    private Object parameterObject;
+    private final Template template;
+    private final Object parameterObject;
 
     /**
      * Constructs a new template transaction which is supposed not to return a value and has no parameter source. This

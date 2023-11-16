@@ -9,7 +9,7 @@ package com.bc.process.util;
 public interface ProcessExitObserver {
     void processExited(int exitValue);
 
-    public static class DefaultEmptyProcessExitObserver implements ProcessExitObserver {
+    class DefaultEmptyProcessExitObserver implements ProcessExitObserver {
         public void processExited(int exitValue) {
         }
     }

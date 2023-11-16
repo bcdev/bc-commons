@@ -32,6 +32,7 @@ public class UpdateTransaction extends TemplateTransaction {
     }
 
     public void execute(Connection connection) throws SQLException {
-        resultValue = getTemplate().executeUpdate(connection, getParameterObject());
+        Object parameterObject = getParameterObject();
+        resultValue = getTemplate().executeUpdate(connection, parameterObject);
     }
 }

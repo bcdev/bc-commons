@@ -42,7 +42,7 @@ public class WKBReader {
 
 	private InputStream inputStream;
 
-	private ByteBuffer bBuffer;
+	private final ByteBuffer bBuffer;
 
 	public WKBReader() {
 		bBuffer = ByteBuffer.allocate(2*8);

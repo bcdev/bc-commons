@@ -82,7 +82,7 @@ public class BeanProperty implements Property {
             throw new IllegalStateException("property is not assignable. No setter method available for property '"+this.name+"'");
         }
         try {
-            setter.invoke(beanInstance, new Object[]{value});
+            setter.invoke(beanInstance, value);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {

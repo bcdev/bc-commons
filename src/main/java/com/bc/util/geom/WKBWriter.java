@@ -44,10 +44,10 @@ import java.util.List;
  */
 public class WKBWriter {
 
-    private ByteArrayOutputStream byteArrayOS;
+    private final ByteArrayOutputStream byteArrayOS;
 
     // holds output data values
-    private ByteBuffer bBuffer;
+    private final ByteBuffer bBuffer;
 
     /**
      * Creates a writer that writes {@link Geometry}s in BIG_ENDIAN byte order

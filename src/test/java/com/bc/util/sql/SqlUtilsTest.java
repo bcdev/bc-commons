@@ -34,7 +34,7 @@ public class SqlUtilsTest extends TestCase {
         final String password = "password";
         final DataSourceConfig config = new DataSourceConfig(driver, url, user, password);
 
-        final BasicDataSource source = (BasicDataSource) SqlUtils.createDatasource(config);
+        final BasicDataSource source = SqlUtils.createDatasource(config);
         assertNotNull(source);
         assertEquals(driver, source.getDriverClassName());
         assertEquals(url, source.getUrl());

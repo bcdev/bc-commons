@@ -19,7 +19,7 @@ import java.io.IOException;
  */
 
 public class EnterPasswordProcessObserver  implements ProcessStreamObserver {
-    private OutputStream processOutputStream;
+    private final OutputStream processOutputStream;
     private String password;
 
     /**

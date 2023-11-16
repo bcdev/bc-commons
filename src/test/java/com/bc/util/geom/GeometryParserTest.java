@@ -66,7 +66,7 @@ public class GeometryParserTest extends TestCase {
         Geometry g;
         Shape s;
         PathIterator i;
-        double c[] = new double[6];
+        double[] c = new double[6];
 
         g = parser.parseWKT("LineString(1 2,3 4.3,  -0.6 5)");
         assertNotNull(g);
@@ -85,7 +85,7 @@ public class GeometryParserTest extends TestCase {
         Geometry g;
         Shape s;
         PathIterator i;
-        double c[] = new double[6];
+        double[] c = new double[6];
 
         g = parser.parseWKT("Polygon ((1 2,3 4,  5  6))");
         assertNotNull(g);
@@ -105,7 +105,7 @@ public class GeometryParserTest extends TestCase {
        Geometry g;
        Shape s;
        PathIterator i;
-       double c[] = new double[6];
+       double[] c = new double[6];
 
        g = parser.parseWKT("Polygon ((1 2,3 4,  5 6, 1 2))");
        assertNotNull(g);
@@ -125,7 +125,7 @@ public class GeometryParserTest extends TestCase {
        Geometry g;
        Shape s;
        PathIterator i;
-       double c[] = new double[6];
+       double[] c = new double[6];
 
        g = parser.parseWKT("Polygon ((1 2,3 4,    5 6e1,   1 2))");
        assertNotNull(g);
@@ -145,7 +145,7 @@ public class GeometryParserTest extends TestCase {
        Geometry g;
        Shape s;
        PathIterator i;
-       double c[] = new double[6];
+       double[] c = new double[6];
 
        g = parser.parseWKT("Polygon ((-1e-1 2,3 4,  5e1    6, -1e-1 2))");
        assertNotNull(g);
@@ -165,7 +165,7 @@ public class GeometryParserTest extends TestCase {
         Geometry g;
         Shape s;
         PathIterator i;
-        double c[] = new double[6];
+        double[] c = new double[6];
 
         g = parser.parseWKT("POLYGON( (1 2,3 4, 5 6,1 2) , (7 8,9 10,11 12, 7 8) )");
         assertNotNull(g);

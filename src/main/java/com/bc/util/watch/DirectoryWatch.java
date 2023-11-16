@@ -68,7 +68,7 @@ public class DirectoryWatch {
     }
 
     synchronized public File[] getDirectoriesContent() {
-        File result[] = new File[directoriesContent.size()];
+        File[] result = new File[directoriesContent.size()];
         return (File[]) directoriesContent.toArray(result);
     }
 
@@ -174,7 +174,7 @@ public class DirectoryWatch {
 
     private void notifyListeners() {
         if (addedFileList.size() > 0) {
-            File added[] = new File[addedFileList.size()];
+            File[] added = new File[addedFileList.size()];
             added = (File[]) addedFileList.toArray(added);
 
             for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
@@ -185,7 +185,7 @@ public class DirectoryWatch {
         }
 
         if (removedFileList.size() > 0) {
-            File removed[] = new File[removedFileList.size()];
+            File[] removed = new File[removedFileList.size()];
             removed = (File[]) removedFileList.toArray(removed);
 
             for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
@@ -202,7 +202,7 @@ public class DirectoryWatch {
 
         for (Iterator iterator = directoryList.iterator(); iterator.hasNext();) {
             File dir = (File) iterator.next();
-            File fileArray[] = dir.listFiles();
+            File[] fileArray = dir.listFiles();
             for (int i = 0; i < fileArray.length; i++) {
                 File file = fileArray[i];
 

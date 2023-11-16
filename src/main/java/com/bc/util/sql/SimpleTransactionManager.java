@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 public class SimpleTransactionManager implements TransactionManager {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     private SimpleTransactionManager(DataSource dataSource) {
         if (dataSource == null) {
@@ -39,6 +39,10 @@ public class SimpleTransactionManager implements TransactionManager {
                     mustResetAutoCommit = true;
                 }
                 try {
+//                    System.out.println(transaction.getClass().getName());
+//                    if (transaction.getClass().getName().equals("com.bc.util.sql.UpdateTransaction")) {
+//                        System.out.println("Transaction: " + ((UpdateTransaction) transaction).getTemplate().getSql());
+//                    }
                     transaction.execute(connection);
                 } catch (SQLException e) {
                     connection.rollback();

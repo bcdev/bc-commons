@@ -22,8 +22,8 @@ class UnitTestDirListener implements DirectoryWatchListener {
     /////// END OF PUBLIC
     ///////////////////////////////////////////////////////////////////////////
 
-    private ArrayList addedList;
-    private ArrayList removedList;
+    private final ArrayList addedList;
+    private final ArrayList removedList;
 
     UnitTestDirListener() {
         addedList = new ArrayList();

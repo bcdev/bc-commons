@@ -35,7 +35,7 @@ public interface Property {
 
     String getTreeAsString();
 
-    static interface Unknown {
+    interface Unknown {
 
     }
 }

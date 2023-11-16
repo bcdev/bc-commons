@@ -54,8 +54,8 @@ public class Template {
     private final ValueProperty resultValueProperty;
     private Map javaToJdbcValueConverterMap;
     private Map jdbcToJavaValueConverterMap;
-    private JavaToJdbcValueConverter defaultJavaToJdbcValueConverter;
-    private JdbcToJavaValueConverter defaultJdbcToJavaValueConverter;
+    private final JavaToJdbcValueConverter defaultJavaToJdbcValueConverter;
+    private final JdbcToJavaValueConverter defaultJdbcToJavaValueConverter;
 
     /**
      * Constructs a new template using the given template SQL, parameter and result types.

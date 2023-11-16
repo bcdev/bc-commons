@@ -13,7 +13,7 @@ import java.awt.Shape;
 
 public class MultiPointGeometry extends AbstractGeometry {
 
-    private GeometryCollection points;
+    private final GeometryCollection points;
 
     public MultiPointGeometry() {
         points = new GeometryCollection();

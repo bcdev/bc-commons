@@ -44,7 +44,7 @@ public class FileUtils {
 
         String fileName;
         if (lastChar >= 0) {
-            fileName = path.substring(lastChar + 1, path.length());
+            fileName = path.substring(lastChar + 1);
         } else {
             fileName = path;
         }

@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class GenericProperty implements Property {
 
-    private String name;
+    private final String name;
     private Class type;
 
     public GenericProperty(String name) {

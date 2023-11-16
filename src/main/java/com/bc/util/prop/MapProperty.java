@@ -26,9 +26,9 @@ import java.util.Map;
  */
 public class MapProperty implements Property {
 
-    private String name;
+    private final String name;
     private Class type;
-    private boolean nameJavaIdentifier;
+    private final boolean nameJavaIdentifier;
 
     public MapProperty(String name) {
         this.name = name;

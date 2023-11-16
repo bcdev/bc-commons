@@ -246,7 +246,7 @@ public class ProcessMonitor {
      */
     @SuppressWarnings("deprecation")
     private class StdoutObserverAdapter implements ProcessStreamObserver {
-        private ProcessObserver observer;
+        private final ProcessObserver observer;
 
         public StdoutObserverAdapter(ProcessObserver observer) {
             this.observer = observer;
@@ -263,7 +263,7 @@ public class ProcessMonitor {
      */
     @SuppressWarnings("deprecation")
     private class StderrObserverAdapter implements ProcessStreamObserver {
-        private ProcessObserver observer;
+        private final ProcessObserver observer;
 
         public StderrObserverAdapter(ProcessObserver observer) {
             this.observer = observer;
@@ -280,7 +280,7 @@ public class ProcessMonitor {
      */
     @SuppressWarnings("deprecation")
     private class ExitObserverAdapter implements ProcessExitObserver {
-        private ProcessObserver observer;
+        private final ProcessObserver observer;
 
         public ExitObserverAdapter(ProcessObserver observer) {
             this.observer = observer;

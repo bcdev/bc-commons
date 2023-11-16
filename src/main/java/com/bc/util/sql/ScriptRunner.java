@@ -163,7 +163,7 @@ public class ScriptRunner {
         stmt.close();
     }
 
-    public static interface ErrorHandler {
+    public interface ErrorHandler {
 
         void handleError(ScriptRunner scriptRunner, SQLException e) throws SQLException;
     }

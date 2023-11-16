@@ -109,5 +109,5 @@ public class GeometryCollection extends AbstractGeometry {
     /////// END OF PUBLIC
     ////////////////////////////////////////////////////////////////////////////////
 
-    private List<Geometry> geometries;
+    private final List<Geometry> geometries;
 }

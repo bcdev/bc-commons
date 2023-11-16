@@ -9,7 +9,7 @@ package com.bc.process.util;
 public interface ProcessStreamObserver {
     void processWroteToStream(String characterData);
 
-    public static class DefaultEmptyProcessStreamObserver implements ProcessStreamObserver {
+    class DefaultEmptyProcessStreamObserver implements ProcessStreamObserver {
         public void processWroteToStream(String characterData) {
         }
     }

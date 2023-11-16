@@ -12,7 +12,7 @@ public class BeanMethodRegistry {
 
     private static final BeanMethodRegistry settersInstance = new BeanMethodRegistry();
     private static final BeanMethodRegistry gettersInstance = new BeanMethodRegistry();
-    private Map typeMap;
+    private final Map typeMap;
 
     private BeanMethodRegistry() {
         typeMap = new HashMap();

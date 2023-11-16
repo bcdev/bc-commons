@@ -49,7 +49,23 @@ public class CompositeTransaction implements Transaction {
      */
     public void execute(Connection connection) throws SQLException {
         for (int i = 0; i < transactions.size(); i++) {
+/*
+            // For debugging:
+            System.out.println(i); // transactions.get(i).getClass().getName());
+*/
             final Transaction t = transactions.get(i);
+/*
+            if (transactions.get(i).getClass().getName().equals("com.bc.util.sql.UpdateTransaction")){
+
+                String sqlQuery = ((UpdateTransaction) t).getTemplate().getSql();
+                // For debugging, please choose th respective target table to be analysed.
+                if (sqlQuery.toUpperCase().indexOf("INSERT INTO TFL_CHEMIE_D_PB") == 0){
+                    System.out.print(i + ": ");
+                    System.out.println(((UpdateTransaction) t).getTemplate().getSql());
+                    System.out.println(((UpdateTransaction) t).getParameterObject());
+                }
+            }
+*/
             t.execute(connection);
         }
     }

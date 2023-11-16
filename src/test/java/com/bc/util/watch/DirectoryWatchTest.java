@@ -92,7 +92,7 @@ public class DirectoryWatchTest extends TestCase {
     }
 
     public void testThatFilesAreWatched() {
-        File list[];
+        File[] list;
 
         list = watch.getWatchedFiles();
         assertEquals(0, list.length);
@@ -173,7 +173,7 @@ public class DirectoryWatchTest extends TestCase {
     public void testWatchedFileThatDoNotChangeAnymoreNotifyListeners() {
         UnitTestDir dir = new UnitTestDir("here");
         UnitTestFile file_1 = new UnitTestFile("testi.txt");
-        File list[];
+        File[] list;
         UnitTestDirListener listener = new UnitTestDirListener();
 
         dir.addFile(file_1);
@@ -196,7 +196,7 @@ public class DirectoryWatchTest extends TestCase {
     public void testNewFilesWithChangingLengthDoNotTriggerNotifies() {
         UnitTestDir dir = new UnitTestDir("here");
         UnitTestFile file = new UnitTestFile("testi.txt");
-        File list[];
+        File[] list;
         UnitTestDirListener listener = new UnitTestDirListener();
 
         dir.addFile(file);
@@ -235,7 +235,7 @@ public class DirectoryWatchTest extends TestCase {
     public void testNewFilesWithChangingMofdificationDateDoNotTriggerNotifies() {
         UnitTestDir dir = new UnitTestDir("here");
         UnitTestFile file = new UnitTestFile("testi.txt");
-        File list[];
+        File[] list;
         UnitTestDirListener listener = new UnitTestDirListener();
 
         dir.addFile(file);
@@ -281,7 +281,7 @@ public class DirectoryWatchTest extends TestCase {
         watch.add(dir_2);
         triggerWatchTilFilesAreStable();
 
-        File content[] = watch.getDirectoriesContent();
+        File[] content = watch.getDirectoriesContent();
         assertNotNull(content);
         assertEquals(2, content.length);
 

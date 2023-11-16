@@ -12,7 +12,7 @@ import java.awt.Shape;
 
 public class MultiLineStringGeometry extends AbstractGeometry {
 
-    private GeometryCollection lineStrings;
+    private final GeometryCollection lineStrings;
 
     public MultiLineStringGeometry() {
         lineStrings = new GeometryCollection();

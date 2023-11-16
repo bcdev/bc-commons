@@ -61,7 +61,7 @@ import java.text.ParseException;
  */
 public class TFW {
 
-    private AffineTransform _transform;
+    private final AffineTransform _transform;
 
     public TFW(double scaleX,
                double shearY,

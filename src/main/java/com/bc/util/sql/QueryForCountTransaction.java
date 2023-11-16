@@ -49,6 +49,6 @@ public class QueryForCountTransaction implements Transaction {
     /////// END OF PUBLIC
     ////////////////////////////////////////////////////////////////////////////////
 
-    private String tableName;
+    private final String tableName;
     private int count;
 }

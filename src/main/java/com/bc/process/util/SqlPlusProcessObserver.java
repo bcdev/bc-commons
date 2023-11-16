@@ -45,7 +45,7 @@ import java.io.IOException;
  */
 
 public class SqlPlusProcessObserver  implements ProcessStreamObserver {
-    private OutputStream processOutputStream;
+    private final OutputStream processOutputStream;
     private String password;
     private boolean hasError = false;
 

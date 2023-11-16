@@ -10,7 +10,7 @@ import java.awt.Shape;
 
 public class MultiPolygonGeometry extends AbstractGeometry {
 
-    private GeometryCollection polygons;
+    private final GeometryCollection polygons;
 
     public MultiPolygonGeometry() {
         polygons = new GeometryCollection();

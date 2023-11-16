@@ -12,7 +12,7 @@ import java.awt.geom.Point2D;
 
 public class PointGeometry extends AbstractGeometry {
 
-    private Point2D point;
+    private final Point2D point;
     private static final double R = 1.0e-5;
     public static final double EPS = 1.0e-5;
 

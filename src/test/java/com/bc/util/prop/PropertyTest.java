@@ -50,7 +50,7 @@ public class PropertyTest extends TestCase {
         assertOutIsIn(testBean, p, new Double(3425.2436));
 
         p = PropertyFactory.createProperty(TestBean.class, "vs");
-        assertOutIsIn(testBean, p, new String("rallamann"));
+        assertOutIsIn(testBean, p, "rallamann");
 
         p = PropertyFactory.createProperty(TestBean.class, "vd");
         assertOutIsIn(testBean, p, new Date());

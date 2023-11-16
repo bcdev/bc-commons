@@ -15,7 +15,7 @@ import java.awt.geom.RectangularShape;
 
 public abstract class ShapeGeometry extends AbstractGeometry {
 
-    private transient Shape shape;
+    private final transient Shape shape;
     public static final double EPS = 1e-5;
 
     protected ShapeGeometry(Shape shape) {

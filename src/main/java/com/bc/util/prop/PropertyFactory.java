@@ -114,7 +114,7 @@ public class PropertyFactory {
         Method setter = BeanMethodRegistry.getSettersInstance().get(beanClass, nameUC);
         if (setter == null) {
             try {
-                setter = beanClass.getMethod("set" + nameUC, new Class[]{getter.getReturnType()});
+                setter = beanClass.getMethod("set" + nameUC, getter.getReturnType());
                 BeanMethodRegistry.getSettersInstance().put(beanClass, nameUC, setter);
             } catch (NoSuchMethodException e) {
             }
