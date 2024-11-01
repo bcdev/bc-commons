@@ -62,7 +62,7 @@ public class CompositeTransaction implements Transaction {
                 if (sqlQuery.toUpperCase().indexOf("INSERT INTO TFL_CHEMIE_D_PB") == 0){
                     System.out.print(i + ": ");
                     System.out.println(((UpdateTransaction) t).getTemplate().getSql());
-                    System.out.println(((UpdateTransaction) t).getParameterObject());
+                    System.out.println(((UpdateTransaction) t).getParameterObject().toString());
                 }
             }
 */
