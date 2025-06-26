@@ -51,19 +51,13 @@ public class CompositeTransaction implements Transaction {
         for (int i = 0; i < transactions.size(); i++) {
 
             final Transaction t = transactions.get(i);
-/*
-            if (transactions.get(i).getClass().getName().equals("com.bc.util.sql.UpdateTransaction") ||
-                transactions.get(i).getClass().getName().equals("com.bc.util.sql.MergeCdTransaction")){
-
-                String sqlQuery = ((UpdateTransaction) t).getTemplate().getSql();
-                // For debugging, please choose th respective target table to be analysed.
-                if (sqlQuery.toUpperCase().indexOf("CD_RESULT") >= 0 && i < 71){
-                    System.out.print(i + ": ");
-                    System.out.println(((UpdateTransaction) t).getTemplate().getSql());
-                    System.out.println(((UpdateTransaction) t).getParameterObject().toString());
+            if (t instanceof UpdateTransaction && i < 2) {
+                final String sql = ((UpdateTransaction) t).getTemplate().getSql();
+                if (i < 4) {
+                    System.out.println("Trying to execute: " + sql);
+                    System.out.println(((UpdateTransaction) t).getParameterObject());
                 }
             }
-*/
 
             t.execute(connection);
         }
