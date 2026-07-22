@@ -85,7 +85,6 @@ public class BeanUtils {
     public static Properties loadProperties(File file) throws IOException {
         final FileInputStream fileInputStream = new FileInputStream(file);
         return loadProperties(fileInputStream);
-
     }
 
     /**
