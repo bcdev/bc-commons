@@ -62,9 +62,9 @@ public class GeometryPersistenceTest extends TestCase {
                 ")", m);
         ut.execute(connection);
 
-        qt = new QueryForObjectTransaction("SELECT " +
-                "name as name, " +
-                "roi as roi " +
+        qt = new QueryForObjectTransaction("SELECT\n" +
+                "    name as name,\n" +
+                "    roi as roi\n" +
                 "FROM " + tableName + "",
                 Map.class, null);
         qt.execute(connection);
