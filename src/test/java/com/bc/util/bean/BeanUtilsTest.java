@@ -81,25 +81,25 @@ public class BeanUtilsTest extends TestCase {
         assertEquals(Boolean.TRUE, bean.getBooleanObjProp());
 
         assertEquals(35, bean.getByteProp());
-        assertEquals(new Byte((byte) -36), bean.getByteObjProp());
+        assertEquals(Byte.valueOf((byte) -36), bean.getByteObjProp());
 
         assertEquals('p', bean.getCharProp());
         assertEquals(new Character('q'), bean.getCharObjProp());
 
         assertEquals(1293, bean.getShortProp());
-        assertEquals(new Short((short) -1294), bean.getShortObjProp());
+        assertEquals(Short.valueOf((short) -1294), bean.getShortObjProp());
 
         assertEquals(85208, bean.getIntProp());
-        assertEquals(new Integer(-85209), bean.getIntObjProp());
+        assertEquals(Integer.valueOf(-85209), bean.getIntObjProp());
 
         assertEquals(98432985245L, bean.getLongProp());
-        assertEquals(new Long(-98432985246L), bean.getLongObjProp());
+        assertEquals(Long.valueOf(-98432985246L), bean.getLongObjProp());
 
         assertEquals(785.435, bean.getFloatProp(), 1e-5);
-        assertEquals(new Float(-785.436), bean.getFloatObjProp());
+        assertEquals((float) -785.436, bean.getFloatObjProp());
 
         assertEquals(2809.987465, bean.getDoubleProp(), 1e-10);
-        assertEquals(new Double(-2809.987466), bean.getDoubleObjProp());
+        assertEquals(-2809.987466, bean.getDoubleObjProp());
 
         assertEquals("Rallomat", bean.getStringObjProp());
         assertEquals(new File("/usr/local"), bean.getFileObjProp());

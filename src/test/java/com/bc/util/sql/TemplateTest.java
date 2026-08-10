@@ -89,7 +89,7 @@ public class TemplateTest extends TestCase {
         final Template t = new Template(sql, null, Integer.class);
         final Object o = t.executeQueryForObject(connection, null);
         assertType(Integer.class, o);
-        assertEquals(new Integer(5), o);
+        assertEquals(5, o);
     }
 
     public void testQueryObjectWithFloatOutputType() throws SQLException,
@@ -103,7 +103,7 @@ public class TemplateTest extends TestCase {
         final Template t = new Template(sql, null, Float.class);
         final Object o = t.executeQueryForObject(connection, null);
         assertType(Float.class, o);
-        assertEquals(new Float(1.3f), o);
+        assertEquals(1.3f, o);
     }
 
     public void testQueryListWithSingleInputValue() throws SQLException,
@@ -119,7 +119,7 @@ public class TemplateTest extends TestCase {
                 "WHERE T1.CF <= ${value}";
 
         final Template t = new Template(sql, Double.class, P.class);
-        final List list = t.executeQueryForList(connection, new Double(1.3));
+        final List list = t.executeQueryForList(connection, 1.3);
         assertEquals(3, list.size());
         assertType(P.class, list.get(0));
         assertType(P.class, list.get(1));
@@ -143,7 +143,7 @@ public class TemplateTest extends TestCase {
         t.addJdbcToJavaValueConverter("value", new HexValueConverter());
         result = t.executeQueryForObject(connection, null);
         assertType(Integer.class, result);
-        assertEquals(new Integer(10), result);
+        assertEquals(10, result);
 
         t.removeJdbcToJavaValueConverter("value");
         result = t.executeQueryForObject(connection, null);
@@ -162,20 +162,20 @@ public class TemplateTest extends TestCase {
         final Template t = new Template(sql, Integer.class, String.class);
 
         try {
-            result = t.executeQueryForObject(connection, new Integer(10));
+            result = t.executeQueryForObject(connection, 10);
             // T1.CS is of type VARCHAR, input is an int
             assertNull(result);
         } catch (SQLException expected) {
         }
 
         t.addJavaToJdbcValueConverter("value", new HexValueConverter());
-        result = t.executeQueryForObject(connection, new Integer(10));
+        result = t.executeQueryForObject(connection, 10);
         assertType(String.class, result);
         assertEquals("0xA", result);
 
         t.removeJavaToJdbcValueConverter("value");
         try {
-            result = t.executeQueryForObject(connection, new Integer(10));
+            result = t.executeQueryForObject(connection, 10);
             // T1.CS is of type VARCHAR, input is an int
             assertNull(result);
         } catch (SQLException expected) {

@@ -23,7 +23,7 @@ public class DefaultValueConverter implements ValueConverter {
             // todo nf/** 3 - if this default conversion causes problems use a special JavaToJdbcValueConverter
             jdbcValue = new java.sql.Timestamp(((java.util.Date) javaValue).getTime());
         } else if (javaValue instanceof Boolean) {
-            jdbcValue = new Integer(((Boolean) javaValue).booleanValue() ? 1 : 0);
+            jdbcValue = (Boolean) javaValue ? 1 : 0;
         } else if (javaValue instanceof Geometry) {
             final Geometry geometry = (Geometry) javaValue;
             jdbcValue = geometry.getAsText();
@@ -39,38 +39,38 @@ public class DefaultValueConverter implements ValueConverter {
             if (boolean.class.equals(property.getType())) {
                 javaValue = Boolean.FALSE;
             } else if (char.class.equals(property.getType())) {
-                javaValue = new Character('\000');
+                javaValue = '\000';
             } else if (byte.class.equals(property.getType())) {
-                javaValue = new Byte((byte) 0);
+                javaValue = (byte) 0;
             } else if (short.class.equals(property.getType())) {
-                javaValue = new Short((short) 0);
+                javaValue = (short) 0;
             } else if (int.class.equals(property.getType())) {
-                javaValue = new Integer(0);
+                javaValue = 0;
             } else if (long.class.equals(property.getType())) {
-                javaValue = new Long(0L);
+                javaValue = 0L;
             } else if (float.class.equals(property.getType())) {
-                javaValue = new Float(0.0f);
+                javaValue = 0.0f;
             } else if (double.class.equals(property.getType())) {
-                javaValue = new Double(0.0);
+                javaValue = 0.0;
             }
         } else if (jdbcValue instanceof Number) {
             final Number jdbcNumber = (Number) jdbcValue;
             if (Boolean.class.equals(property.getType()) || boolean.class.equals(property.getType())) {
                 javaValue = Boolean.valueOf(jdbcNumber.intValue() != 0);
             } else if (Character.class.equals(property.getType()) || char.class.equals(property.getType())) {
-                javaValue = new Character((char) (jdbcNumber.intValue() & 0xffff));
+                javaValue = (char) (jdbcNumber.intValue() & 0xffff);
             } else if (Byte.class.equals(property.getType()) || byte.class.equals(property.getType())) {
-                javaValue = new Byte(jdbcNumber.byteValue());
+                javaValue = jdbcNumber.byteValue();
             } else if (Short.class.equals(property.getType()) || short.class.equals(property.getType())) {
-                javaValue = new Short(jdbcNumber.shortValue());
+                javaValue = jdbcNumber.shortValue();
             } else if (Integer.class.equals(property.getType()) || int.class.equals(property.getType())) {
-                javaValue = new Integer(jdbcNumber.intValue());
+                javaValue = jdbcNumber.intValue();
             } else if (Long.class.equals(property.getType()) || long.class.equals(property.getType())) {
-                javaValue = new Long(jdbcNumber.longValue());
+                javaValue = jdbcNumber.longValue();
             } else if (Float.class.equals(property.getType()) || float.class.equals(property.getType())) {
-                javaValue = new Float(jdbcNumber.floatValue());
+                javaValue = jdbcNumber.floatValue();
             } else if (Double.class.equals(property.getType()) || double.class.equals(property.getType())) {
-                javaValue = new Double(jdbcNumber.doubleValue());
+                javaValue = jdbcNumber.doubleValue();
             } else if (String.class.equals(property.getType())) {
                 javaValue = jdbcNumber.toString();
             }

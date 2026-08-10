@@ -12,8 +12,6 @@
  */
 package com.bc.util.io;
 
-import sun.awt.shell.ShellFolder;
-
 import javax.imageio.stream.FileImageInputStream;
 import javax.imageio.stream.FileImageOutputStream;
 import java.io.File;

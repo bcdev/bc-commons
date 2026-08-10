@@ -44,10 +44,10 @@ public class PropertyTest extends TestCase {
         final TestBean testBean = new TestBean();
 
         p = PropertyFactory.createProperty(TestBean.class, "vi");
-        assertOutIsIn(testBean, p, new Integer(4357));
+        assertOutIsIn(testBean, p, 4357);
 
         p = PropertyFactory.createProperty(TestBean.class, "vf");
-        assertOutIsIn(testBean, p, new Double(3425.2436));
+        assertOutIsIn(testBean, p, 3425.2436);
 
         p = PropertyFactory.createProperty(TestBean.class, "vs");
         assertOutIsIn(testBean, p, "rallamann");
@@ -59,37 +59,37 @@ public class PropertyTest extends TestCase {
         assertOutIsIn(testBean, p, new TestBean());
 
         p = PropertyFactory.createProperty(TestBean.class, "vo.vf");
-        assertOutIsIn(testBean, p, new Double(0.05));
+        assertOutIsIn(testBean, p, 0.05);
 
         p = PropertyFactory.createProperty(TestBean.class, "vo.vd");
         assertOutIsIn(testBean, p, null);
 
         p = PropertyFactory.createProperty(TestBean.class, "vm");
-        assertOutIsIn(testBean, p, new HashMap());
+        assertOutIsIn(testBean, p, new HashMap<>());
 
         p = PropertyFactory.createProperty(TestBean.class, "vm.x");
-        assertOutIsIn(testBean, p, new Float(3.5f));
+        assertOutIsIn(testBean, p, 3.5f);
 
         p = PropertyFactory.createProperty(TestBean.class, "vm.y");
-        assertOutIsIn(testBean, p, new Float(-2.8f));
+        assertOutIsIn(testBean, p, -2.8f);
 
         p = PropertyFactory.createProperty(TestBean.class, "vm.b");
         assertOutIsIn(testBean, p, new TestBean());
 
         p = PropertyFactory.createProperty(TestBean.class, "vm.b.vi");
-        assertOutIsIn(testBean, p, new Integer(23));
+        assertOutIsIn(testBean, p, 23);
 
         p = PropertyFactory.createProperty(TestBean.class, "ai");
         assertOutIsIn(testBean, p, new int[3]);
 
         p = PropertyFactory.createProperty(TestBean.class, "ai[0]");
-        assertOutIsIn(testBean, p, new Integer(43));
+        assertOutIsIn(testBean, p, 43);
 
         p = PropertyFactory.createProperty(TestBean.class, "ai[1]");
-        assertOutIsIn(testBean, p, new Integer(324));
+        assertOutIsIn(testBean, p, 324);
 
         p = PropertyFactory.createProperty(TestBean.class, "ai[2]");
-        assertOutIsIn(testBean, p, new Integer(-43));
+        assertOutIsIn(testBean, p, -43);
 
         p = PropertyFactory.createProperty(TestBean.class, "af");
         assertOutIsIn(testBean, p, new double[0]);
@@ -110,16 +110,16 @@ public class PropertyTest extends TestCase {
         assertOutIsIn(testBean, p, new HashMap[3]);
 
         p = PropertyFactory.createProperty(TestBean.class, "am[1]");
-        assertOutIsIn(testBean, p, new HashMap());
+        assertOutIsIn(testBean, p, new HashMap<>());
 
         p = PropertyFactory.createProperty(TestBean.class, "am[1].name");
         assertOutIsIn(testBean, p, "Bibo");
 
         p = PropertyFactory.createProperty(TestBean.class, "am[1].entries");
-        assertOutIsIn(testBean, p, new HashMap());
+        assertOutIsIn(testBean, p, new HashMap<>());
 
         p = PropertyFactory.createProperty(TestBean.class, "am[1].entries.age");
-        assertOutIsIn(testBean, p, new Integer(32));
+        assertOutIsIn(testBean, p, 32);
     }
 
     private void assertOutIsIn(final TestBean testBean, Property p, Object in) {
@@ -179,7 +179,7 @@ public class PropertyTest extends TestCase {
         assertEquals(0, b.getVi());
         p.makeAssignable(b);
         assertEquals(0, b.getVi());
-        p.setValue(b, new Integer(4));
+        p.setValue(b, 4);
         assertEquals(4, b.getVi());
 
         p = PropertyFactory.createProperty(TestBean.class, "vo.vi");
@@ -188,7 +188,7 @@ public class PropertyTest extends TestCase {
         p.makeAssignable(b);
         assertNotNull(b.getVo());
         assertEquals(0, b.getVo().getVi());
-        p.setValue(b, new Integer(45));
+        p.setValue(b, 45);
         assertEquals(45, b.getVo().getVi());
 
         p = PropertyFactory.createProperty(TestBean.class, "vo.vo.vi");
@@ -198,7 +198,7 @@ public class PropertyTest extends TestCase {
         assertNotNull(b.getVo());
         assertNotNull(b.getVo().getVo());
         assertEquals(0, b.getVo().getVo().getVi());
-        p.setValue(b, new Integer(456));
+        p.setValue(b, 456);
         assertEquals(456, b.getVo().getVo().getVi());
     }
 
@@ -224,7 +224,7 @@ public class PropertyTest extends TestCase {
         assertNull(b.getAo()[1]);
         assertNotNull(b.getAo()[2]);
         assertEquals(0, b.getAo()[2].getVi());
-        p.setValue(b, new Integer(45));
+        p.setValue(b, 45);
         assertEquals(45, b.getAo()[2].getVi());
 
         p = PropertyFactory.createProperty(TestBean.class, "vo.ao[2].vi");
@@ -238,7 +238,7 @@ public class PropertyTest extends TestCase {
         assertNull(b.getVo().getAo()[1]);
         assertNotNull(b.getVo().getAo()[2]);
         assertEquals(0, b.getVo().getAo()[2].getVi());
-        p.setValue(b, new Integer(456));
+        p.setValue(b, 456);
         assertEquals(456, b.getVo().getAo()[2].getVi());
     }
 
@@ -253,13 +253,13 @@ public class PropertyTest extends TestCase {
         final NestedProperty n1 = new NestedProperty(vm, b);
         final NestedProperty n2 = new NestedProperty(n1, vi);
         assertEquals(Property.UNKNOWN_TYPE, n2.getType());
-        assertEquals(new Integer(0), n2.getValue(testBean));
-        n2.setValue(testBean, new Integer(5));
+        assertEquals(0, n2.getValue(testBean));
+        n2.setValue(testBean, 5);
         assertEquals(int.class, n2.getType());
-        assertEquals(new Integer(5), n2.getValue(testBean));
+        assertEquals(5, n2.getValue(testBean));
         n2.setValue(testBean, "120");
         assertEquals(int.class, n2.getType());
-        assertEquals(new Integer(120), n2.getValue(testBean));
+        assertEquals(120, n2.getValue(testBean));
     }
 
 

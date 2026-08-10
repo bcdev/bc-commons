@@ -283,7 +283,7 @@ public class Template {
             final ResultSet rs = stmt.executeQuery();
             try {
                 rs.next();
-                count = new Integer(rs.getInt(1));
+                count = rs.getInt(1);
             } finally {
                 rs.close();
             }
