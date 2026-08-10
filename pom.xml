@@ -7,7 +7,7 @@
     <groupId>com.bc</groupId>
     <artifactId>bc-commons</artifactId>
     <name>BC Commons</name>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.4.0</version>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -78,13 +78,22 @@
             </snapshots>
         </repository>
     </repositories>
+    <properties>
+        <!-- Erzwingt überall UTF-8 (verhindert Encoding-Fehler unter Windows/Linux) -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+        <!-- Aktualisierte Version für das JAR-Plugin -->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
     <build>
         <extensions>
+            <!-- Tipp: Version auf >= 3.0.0 anheben, falls möglich -->
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ssh</artifactId>
-                <version>1.0-beta-7</version>
+                <version>3.3.4</version>
             </extension>
         </extensions>
         <plugins>
@@ -93,10 +102,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <!-- Source/Target/Encoding werden jetzt sauber aus den Properties vererbt -->
                     <debug>true</debug>
-                    <encoding>ISO-8859-1</encoding>
                 </configuration>
             </plugin>
             <plugin>
@@ -124,11 +131,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.2</version>
+                <!-- Aktualisiert auf eine stabile, moderne Version -->
+                <version>3.4.2</version>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>jar</goal>
+<!--                            <goal>jar</goal>-->
                             <goal>test-jar</goal>
                         </goals>
                     </execution>
@@ -136,4 +144,63 @@
             </plugin>
         </plugins>
     </build>
+
+    <!--    <build>-->
+    <!--        <extensions>-->
+    <!--            <extension>-->
+    <!--                <groupId>org.apache.maven.wagon</groupId>-->
+    <!--                <artifactId>wagon-ssh</artifactId>-->
+    <!--                <version>1.0-beta-7</version>-->
+    <!--            </extension>-->
+    <!--        </extensions>-->
+    <!--        <plugins>-->
+    <!--            <plugin>-->
+    <!--                <groupId>org.apache.maven.plugins</groupId>-->
+    <!--                <artifactId>maven-compiler-plugin</artifactId>-->
+    <!--                <version>3.13.0</version>-->
+    <!--                <configuration>-->
+    <!--                    <source>1.8</source>-->
+    <!--                    <target>1.8</target>-->
+    <!--                    <debug>true</debug>-->
+    <!--                    <encoding>UTF-8</encoding>-->
+    <!--&lt;!&ndash;                    <encoding>ISO-8859-1</encoding>&ndash;&gt;-->
+    <!--                </configuration>-->
+    <!--            </plugin>-->
+    <!--            <plugin>-->
+    <!--                <groupId>org.apache.maven.plugins</groupId>-->
+    <!--                <artifactId>maven-source-plugin</artifactId>-->
+    <!--                <version>2.2.1</version>-->
+    <!--                <executions>-->
+    <!--                    <execution>-->
+    <!--                        <phase>package</phase>-->
+    <!--                        <goals>-->
+    <!--                            <goal>jar</goal>-->
+    <!--                            <goal>test-jar</goal>-->
+    <!--                        </goals>-->
+    <!--                    </execution>-->
+    <!--                </executions>-->
+    <!--            </plugin>-->
+    <!--            <plugin>-->
+    <!--                <groupId>org.apache.maven.plugins</groupId>-->
+    <!--                <artifactId>maven-surefire-plugin</artifactId>-->
+    <!--                <version>3.3.1</version>-->
+    <!--                <configuration>-->
+    <!--                    <skip>false</skip>-->
+    <!--                </configuration>-->
+    <!--            </plugin>-->
+    <!--            <plugin>-->
+    <!--                <groupId>org.apache.maven.plugins</groupId>-->
+    <!--                <artifactId>maven-jar-plugin</artifactId>-->
+    <!--                <version>2.2</version>-->
+    <!--                <executions>-->
+    <!--                    <execution>-->
+    <!--                        <goals>-->
+    <!--                            <goal>jar</goal>-->
+    <!--                            <goal>test-jar</goal>-->
+    <!--                        </goals>-->
+    <!--                    </execution>-->
+    <!--                </executions>-->
+    <!--            </plugin>-->
+    <!--        </plugins>-->
+    <!--    </build>-->
 </project>
