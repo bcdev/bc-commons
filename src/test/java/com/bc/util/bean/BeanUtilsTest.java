@@ -84,7 +84,7 @@ public class BeanUtilsTest extends TestCase {
         assertEquals(Byte.valueOf((byte) -36), bean.getByteObjProp());
 
         assertEquals('p', bean.getCharProp());
-        assertEquals(new Character('q'), bean.getCharObjProp());
+        assertEquals(Character.valueOf('q'), bean.getCharObjProp());
 
         assertEquals(1293, bean.getShortProp());
         assertEquals(Short.valueOf((short) -1294), bean.getShortObjProp());

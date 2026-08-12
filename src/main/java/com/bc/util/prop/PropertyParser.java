@@ -205,7 +205,7 @@ public class PropertyParser {
                             "character value expected for property '" + name + "', value was '" + value + "'",
                             0);
                 }
-                obj = new Character(value.charAt(0));
+                obj = value.charAt(0);
             } else if (type.equals(Short.TYPE) || type.equals(Short.class)) {
                 obj = Short.valueOf(value);
             } else if (type.equals(Integer.TYPE) || type.equals(Integer.class)) {
