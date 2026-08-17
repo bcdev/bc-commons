@@ -4,10 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.bc</groupId>
     <artifactId>bc-commons</artifactId>
     <name>BC Commons</name>
     <version>1.4.0</version>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -36,6 +38,7 @@
             scm:git:git@github.com:bcdev/bc-commons.git
         </developerConnection>
     </scm>
+
     <distributionManagement>
         <repository>
             <id>bc-mvn-repo-public</id>
@@ -50,6 +53,7 @@
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
     </distributionManagement>
+
     <repositories>
         <repository>
             <id>bc-mvn-repo-http</id>
@@ -78,15 +82,13 @@
             </snapshots>
         </repository>
     </repositories>
+
     <properties>
-        <!-- Erzwingt überall UTF-8 (verhindert Encoding-Fehler unter Windows/Linux) -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-        <!-- Aktualisierte Version für das JAR-Plugin -->
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.release>8</maven.compiler.release>
     </properties>
+
     <build>
         <extensions>
             <!-- Tipp: Version auf >= 3.0.0 anheben, falls möglich -->
@@ -136,7 +138,7 @@
                 <executions>
                     <execution>
                         <goals>
-<!--                            <goal>jar</goal>-->
+                            <!--<goal>jar</goal>-->
                             <goal>test-jar</goal>
                         </goals>
                     </execution>
